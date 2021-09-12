@@ -88,6 +88,7 @@ class _GameListState extends State<GameList> {
                         scrollDirection: Axis.vertical,
                         itemCount: gameModel.games.length,
                         itemBuilder: (context, index) {
+                          Games game = gameModel.games[index];
                           return Card(
                             child: Column(
                               children: [
@@ -140,7 +141,9 @@ class _GameListState extends State<GameList> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        Detail()));
+                                                        Detail(
+                                                          game: game,
+                                                        )));
                                           },
                                           child: Text("Detail")),
                                     ),

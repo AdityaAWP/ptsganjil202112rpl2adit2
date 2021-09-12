@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:mid_test/menuModel.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Detail extends StatefulWidget {
-  const Detail({Key? key}) : super(key: key);
+  final Games game;
+
+  const Detail({Key? key, required this.game}) : super(key: key);
 
   @override
   _DetailState createState() => _DetailState();
 }
 
 class _DetailState extends State<Detail> {
+  void _launchURL(String _url) async => await canLaunch(_url)
+      ? await launch(_url)
+      : throw 'Could not launch $_url';
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,39 +39,47 @@ class _DetailState extends State<Detail> {
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                              height: 200,
-                              width: 200,
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(200.0),
                               child: Image(
-                                image: AssetImage('assets/spalshscreen.png'),
-                              )),
+                                fit: BoxFit.fill,
+                                image: NetworkImage(widget.game.thumbnail),
+                                height: 200.0,
+                                width: 200.0,
+                              ),
+                            ),
+                          ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Title",
+                                  widget.game.title,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 24),
                                 ),
                                 Text(
-                                  'genre',
+                                  widget.game.genre,
                                   style: TextStyle(
                                       fontSize: 14, letterSpacing: 0.8),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 10),
                                   child: Text(
-                                    'Publisher',
+                                    widget.game.publisher,
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
-                                Text('Release-Date')
+                                Text(widget.game.release_date)
                               ],
                             ),
                           ),
@@ -74,23 +90,26 @@ class _DetailState extends State<Detail> {
                           Expanded(
                             flex: 1,
                             child: Image(
-                              image: AssetImage('assets/spalshscreen.png'),
+                              image: NetworkImage(widget.game.thumbnail),
                             ),
                           ),
                           Expanded(
                             flex: 1,
                             child: Image(
-                              image: AssetImage('assets/spalshscreen.png'),
+                              image: NetworkImage(widget.game.thumbnail),
                             ),
                           ),
                         ],
                       ),
                       Padding(
                         padding: const EdgeInsets.all(10.0),
-                        child: Text('Deskirpsi'),
+                        child: Text(widget.game.short_description),
                       ),
                       ElevatedButton(
-                          onPressed: () {}, child: Text('Link ke game'))
+                          onPressed: () {
+                            _launchURL(widget.game.game_url);
+                          },
+                          child: Text('Kunjungi Game'))
                     ],
                   ))),
         ],
